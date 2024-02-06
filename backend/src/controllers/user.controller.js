@@ -66,12 +66,17 @@ const handleProcessRegister = async (req, res, next) => {
       throw createError(400, "Username is required");
     }
 
+    const normalizeString = username.trim().replace(/\s+/g, " ").toLowerCase();
+
+    if (/^[^a-zA-Z]/.test(normalizeString)) {
+      throw createError(400, "Invalid Category format.");
+    }
     // Validation: Username must start with a letter, and be at least 3 characters long
     const usernameRegex = /^[a-zA-Z][a-zA-Z0-9_]{2,31}$/;
-    if (!usernameRegex.test(username)) {
+    if (!usernameRegex.test(normalizeString)) {
       throw createError(
         400,
-        "Invalid username format. Username must be at least 3 characters and not more than 32 characters "
+        "Username must be at least 3 characters and not more than 32 characters. Don't use space "
       );
     }
 

@@ -1,6 +1,7 @@
 import createError from "http-errors";
 import Category from "../models/category.model.js";
 import findDataById from "../services/findDataById.js";
+import { validateId } from "../helper/validateId.js";
 
 const handleGetCategories = async (req, res, next) => {
   try {
@@ -28,16 +29,14 @@ const handleCreateCategory = async (req, res, next) => {
   try {
     const { category } = req.body;
 
-    const trimmedCategory = category.replace(/\s+/g, " ").trim();
+    const normalizeString = category.trim().replace(/\s+/g, " ").toLowerCase();
 
-    const categorySlug = trimmedCategory.replace(/\s+/g, "-");
-
-    if (/^\d/.test(categorySlug)) {
+    if (/^[^a-zA-Z]/.test(normalizeString)) {
       throw createError(400, "Invalid Category format.");
     }
 
     const existingCategory = await Category.findOne({
-      category_slug: categorySlug,
+      category: normalizeString,
     });
 
     if (existingCategory) {
@@ -49,8 +48,7 @@ const handleCreateCategory = async (req, res, next) => {
 
     // Create a new category
     const newCategory = new Category({
-      category: trimmedCategory,
-      category_slug: categorySlug,
+      category: normalizeString,
     });
 
     // Save the category to the database
@@ -68,12 +66,13 @@ const handleCreateCategory = async (req, res, next) => {
 const handleDeleteCategory = async (req, res, next) => {
   try {
     const id = req.params.id;
+    validateId(id);
     const options = {};
 
     const category = await findDataById(id, Category, options, next);
 
     if (category) {
-      const deletedCategory = await Category.findByIdAndDelete(id);
+      await Category.findByIdAndDelete(id);
 
       res.status(200).send({
         success: true,

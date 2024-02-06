@@ -1,6 +1,7 @@
 import createError from "http-errors";
 import Table from "../models/table.model.js";
 import findDataById from "../services/findDataById.js";
+import { validateId } from "../helper/validateId.js";
 
 let tableCounter = 0;
 
@@ -46,7 +47,7 @@ const handleGetTables = async (req, res, next) => {
 const handleDeleteTable = async (req, res, next) => {
   try {
     const id = req.params.id;
-
+    validateId(id);
     const options = {};
 
     const table = await findDataById(id, Table, options, next);
@@ -66,6 +67,8 @@ const handleDeleteTable = async (req, res, next) => {
 const handleEditTable = async (req, res, next) => {
   try {
     const id = req.params.id;
+
+    validateId(id);
 
     const options = {};
 

@@ -3,6 +3,12 @@ const { Schema, model } = mongoose;
 
 const MenuItemsSchema = new Schema(
   {
+    title: {
+      type: String,
+      unique: true,
+      lowercase: true,
+      trim: true,
+    },
     item_name: {
       type: String,
       unique: true,

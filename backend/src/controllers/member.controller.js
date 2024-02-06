@@ -2,6 +2,7 @@ import createError from "http-errors";
 import Member from "../models/member.model.js";
 import findDataById from "../services/findDataById.js";
 import stringToNumber from "../helper/stringToNumber.js";
+import { validateId } from "../helper/validateId.js";
 
 const handleGetMembers = async (req, res, next) => {
   try {
@@ -129,7 +130,7 @@ const handleCreateMember = async (req, res, next) => {
     if (!(name && mobile)) {
       throw createError(400, "Name and Mobile are required fields");
     }
-    const trimmedName = name.replace(/\s+/g, " ").trim();
+    const trimmedName = name.trim().replace(/\s+/g, " ").toLowerCase();
     if (/^\d/.test(trimmedName)) {
       throw createError(400, "Invalid name format.");
     }
@@ -171,6 +172,7 @@ const handleCreateMember = async (req, res, next) => {
 const handleDeleteMember = async (req, res, next) => {
   try {
     const id = req.params.id;
+    validateId(id);
     const options = {};
 
     const member = await findDataById(id, Member, options, next);
