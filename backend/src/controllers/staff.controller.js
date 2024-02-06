@@ -42,6 +42,19 @@ const handleCreateStaff = async (req, res, next) => {
   }
 };
 
+const handleGetStaffs = async (req, res, next) => {
+  try {
+    const staffs = await Staff.find().sort({ name: 1 });
+    res.status(200).send({
+      success: true,
+      message: "Staffs retrieved successfully",
+      data: staffs,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const handleDeleteStaff = async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -60,4 +73,4 @@ const handleDeleteStaff = async (req, res, next) => {
   }
 };
 
-export { handleCreateStaff, handleDeleteStaff };
+export { handleCreateStaff, handleDeleteStaff, handleGetStaffs };
