@@ -6,12 +6,14 @@ const OrderLogSchema = new Schema({
     type: String,
     lowercase: true,
     trim: true,
+    required: true,
     ref: "Staff",
   },
   table_code: {
     type: String,
     lowercase: true,
     trim: true,
+    required: true,
     ref: "Table",
   },
   createdAt: {
