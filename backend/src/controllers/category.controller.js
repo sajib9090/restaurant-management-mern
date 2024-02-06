@@ -69,16 +69,15 @@ const handleDeleteCategory = async (req, res, next) => {
     validateId(id);
     const options = {};
 
-    const category = await findDataById(id, Category, options, next);
+    // lets check data available with this id
+    await findDataById(id, Category, options, next);
 
-    if (category) {
-      await Category.findByIdAndDelete(id);
+    await Category.findByIdAndDelete(id);
 
-      res.status(200).send({
-        success: true,
-        message: `Category deleted successfully.`,
-      });
-    }
+    res.status(200).send({
+      success: true,
+      message: `Category deleted successfully.`,
+    });
   } catch (error) {
     next(error);
   }

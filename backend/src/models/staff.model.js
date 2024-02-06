@@ -15,5 +15,5 @@ const StaffSchema = new Schema({
   },
 });
 
-const Staffs = model("Staffs", StaffSchema);
-export default Staffs;
+const Staff = model("Staff", StaffSchema);
+export default Staff;
