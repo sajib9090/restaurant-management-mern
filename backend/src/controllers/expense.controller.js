@@ -40,4 +40,63 @@ const handleCreateExpense = async (req, res, next) => {
   }
 };
 
-export { handleCreateExpense };
+const handleGetExpenses = async (req, res, next) => {
+  try {
+    const { id, month, startDate, endDate } = req.query;
+    const filter = {};
+
+    if (id) {
+      filter._id = id;
+    }
+
+    if (month) {
+      const startOfMonth = new Date(month);
+      startOfMonth.setUTCHours(0, 0, 0, 0);
+      const endOfMonth = new Date(startOfMonth);
+      endOfMonth.setUTCMonth(endOfMonth.getUTCMonth() + 1);
+      endOfMonth.setUTCDate(0);
+      filter.createdAt = { $gte: startOfMonth, $lt: endOfMonth };
+    }
+
+    if (startDate) {
+      filter.createdAt = { ...filter.createdAt, $gte: new Date(startDate) };
+    }
+
+    if (endDate) {
+      filter.createdAt = { ...filter.createdAt, $lt: new Date(endDate) };
+    }
+
+    const expenses = await Expense.find(filter).sort({ createdAt: -1 });
+
+    res.status(200).send({
+      success: true,
+      message: "Expenses retrieved successfully",
+      data: expenses,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const handleDeleteExpense = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    validateId(id);
+
+    const options = {};
+
+    await findDataById(id, Expense, options, next);
+
+    await Expense.findByIdAndDelete(id);
+
+    res.status(200).send({
+      success: true,
+      message: "Expense deleted successfully",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export { handleCreateExpense, handleGetExpenses, handleDeleteExpense };
