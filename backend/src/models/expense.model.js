@@ -2,14 +2,18 @@ import mongoose from "mongoose";
 const { Schema, model } = mongoose;
 
 const ExpenseSchema = new Schema({
-  item_name: {
+  title: {
     type: String,
     unique: true,
     lowercase: true,
     trim: true,
-    required: [true, "Item name is required"],
+    required: [true, "Title is required"],
   },
-  creator: {
+  expense_amount: {
+    type: Number,
+    required: true,
+  },
+  expense_creator: {
     type: String,
     required: [true, "Creator is required"],
     ref: "Users",

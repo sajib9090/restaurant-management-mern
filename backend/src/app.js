@@ -11,6 +11,7 @@ import TableRouter from "./routers/Table.router.js";
 import MemberRouter from "./routers/member.router.js";
 import MenuItemRouter from "./routers/menuItem.router.js";
 import StaffRouter from "./routers/staff.router.js";
+import ExpenseRouter from "./routers/expense.router.js";
 //
 
 const app = express();
@@ -45,6 +46,7 @@ app.use("/api/v2", TableRouter);
 app.use("/api/v2", MemberRouter);
 app.use("/api/v2", MenuItemRouter);
 app.use("/api/v2", StaffRouter);
+app.use("/api/v2", ExpenseRouter);
 
 app.get("/", (req, res) => {
   res.status(200).send({ success: true, message: "Server is running" });
