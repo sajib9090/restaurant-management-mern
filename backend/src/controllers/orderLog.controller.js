@@ -55,6 +55,19 @@ const handleCreateOrderLog = async (req, res, next) => {
 
 const handleDeleteOrderLog = async (req, res, next) => {
   try {
+    const { table } = req.params;
+
+    const orderLog = await OrderLog.findOne({ table_code: table });
+    if (!orderLog) {
+      throw createError(404, "Table does not exist");
+    }
+
+    await OrderLog.deleteOne({ table_code: table });
+
+    res.status(200).send({
+      success: true,
+      message: "Order log deleted successfully",
+    });
   } catch (error) {
     next(error);
   }
