@@ -21,6 +21,7 @@ const handleGetMembers = async (req, res, next) => {
     };
 
     const members = await Member.find(filter)
+      .sort({ name: 1 })
       .limit(limit)
       .skip((page - 1) * limit);
 

@@ -13,7 +13,7 @@ const handleGetCategories = async (req, res, next) => {
       category: { $regex: regExSearch },
     };
 
-    const categories = await Category.find(filter);
+    const categories = await Category.find(filter).sort({ category: 1 });
 
     res.status(200).send({
       success: true,

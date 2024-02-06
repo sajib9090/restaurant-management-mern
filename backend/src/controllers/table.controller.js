@@ -32,7 +32,7 @@ const handleCreateTable = async (req, res, next) => {
 
 const handleGetTables = async (req, res, next) => {
   try {
-    const tables = await Table.find();
+    const tables = await Table.find().sort({ createdAt: -1 });
 
     res.status(200).send({
       success: true,

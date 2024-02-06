@@ -13,7 +13,7 @@ const handleGetUsers = async (req, res, next) => {
     };
 
     const options = { password: 0 };
-    const users = await User.find(filter, options);
+    const users = await User.find(filter, options).sort({ createdAt: -1 });
 
     res.status(200).send({
       success: true,

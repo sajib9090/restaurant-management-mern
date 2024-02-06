@@ -76,7 +76,7 @@ const handleGetMenuItems = async (req, res, next) => {
       item_name: { $regex: regExSearch },
     };
 
-    const menuItems = await MenuItems.find(filter);
+    const menuItems = await MenuItems.find(filter).sort({ item_name: 1 });
 
     res.status(200).send({
       success: true,
