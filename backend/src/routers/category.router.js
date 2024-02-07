@@ -7,10 +7,8 @@ import {
 } from "../controllers/category.controller.js";
 const categoryRouter = express.Router();
 
-//user router
 categoryRouter.get("/categories", handleGetCategories);
 
-//only admin and chairman can create user
 categoryRouter.post(
   "/category/add-category",
   isLoggedIn,

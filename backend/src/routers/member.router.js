@@ -10,9 +10,14 @@ import {
 
 const MemberRouter = express.Router();
 
-MemberRouter.get("/members", isLoggedIn, isAdminOrChairman, handleGetMembers);
+MemberRouter.get("/members", handleGetMembers);
 MemberRouter.get("/member/:mobile", handleGetMember);
-MemberRouter.patch("/member/edit/:mobile", handleEditMember);
+MemberRouter.patch(
+  "/member/edit/:mobile",
+  isLoggedIn,
+  isAdminOrChairman,
+  handleEditMember
+);
 MemberRouter.post("/member/add-member", isLoggedIn, handleCreateMember);
 MemberRouter.delete(
   "/member/delete/:id",

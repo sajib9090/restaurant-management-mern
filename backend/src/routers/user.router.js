@@ -11,7 +11,7 @@ const userRouter = express.Router();
 //user router
 userRouter.get("/users", isLoggedIn, isAdminOrChairman, handleGetUsers);
 userRouter.get("/user/:id", isLoggedIn, isAdminOrChairman, handleGetUser);
-userRouter.delete("/user/:id", isLoggedIn, handleDeleteUser);
+userRouter.delete("/user/:id", isLoggedIn, isAdminOrChairman, handleDeleteUser);
 
 //only admin and chairman can create user
 userRouter.post(

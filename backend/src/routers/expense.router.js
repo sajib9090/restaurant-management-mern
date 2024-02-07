@@ -12,6 +12,6 @@ ExpenseRouter.post("/expense/add-expense", isLoggedIn, handleCreateExpense);
 ExpenseRouter.delete("/expense/delete/:id", isLoggedIn, handleDeleteExpense);
 
 //this route can give data by id, month, start and end date also
-ExpenseRouter.get("/expenses", isLoggedIn, handleGetExpenses);
+ExpenseRouter.get("/expenses", handleGetExpenses);
 
 export default ExpenseRouter;

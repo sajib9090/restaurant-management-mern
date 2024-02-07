@@ -29,6 +29,13 @@ const MembersSchema = new Schema(
     invoices_code: {
       type: [String],
       default: [],
+      validate: {
+        validator: function (array) {
+          return array.every(
+            (code) => typeof code === "string" && code.length <= 25
+          );
+        },
+      },
     },
   },
   { timestamps: true }

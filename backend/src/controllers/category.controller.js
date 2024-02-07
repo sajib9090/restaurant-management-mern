@@ -67,8 +67,8 @@ const handleDeleteCategory = async (req, res, next) => {
   try {
     const id = req.params.id;
     validateId(id);
+    
     const options = {};
-
     // lets check data available with this id
     await findDataById(id, Category, options, next);
 

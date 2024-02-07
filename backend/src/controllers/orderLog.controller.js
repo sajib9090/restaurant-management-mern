@@ -1,8 +1,6 @@
 import createError from "http-errors";
 import OrderLog from "../models/orderLog.model.js";
 import Staff from "../models/staff.model.js";
-import { validateId } from "../helper/validateId.js";
-import findDataById from "../services/findDataById.js";
 import Table from "../models/table.model.js";
 
 const handleCreateOrderLog = async (req, res, next) => {

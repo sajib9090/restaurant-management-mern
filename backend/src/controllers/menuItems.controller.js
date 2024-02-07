@@ -35,7 +35,7 @@ const handleCreateMenuItem = async (req, res, next) => {
       .toLowerCase();
 
     if (/^[^a-zA-Z]/.test(categoryValidation)) {
-      throw createError(400, "Invalid category format.");
+      throw createError(400, "invalid name format.");
     }
 
     const existingCategory = await Category.findOne({

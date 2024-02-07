@@ -100,12 +100,42 @@ const handleEditMember = async (req, res, next) => {
 
     // Append new invoices_code values to the existing array
     if ("invoices_code" in updatedFields) {
+      const newInvoicesCode = Array.isArray(updatedFields.invoices_code)
+        ? updatedFields.invoices_code
+        : [updatedFields.invoices_code];
+
+      // add some length validation to safe from attacker
+      const validatedInvoicesCode = newInvoicesCode.map((code) => {
+        if (typeof code === "string" && code.length <= 25) {
+          return code;
+        } else {
+          throw createError(
+            400,
+            "Each invoice code must be a string with a maximum length of 25 characters."
+          );
+        }
+      });
+
       updatedFields.invoices_code = [
         ...(member.invoices_code || []),
-        ...(Array.isArray(updatedFields.invoices_code)
-          ? updatedFields.invoices_code
-          : [updatedFields.invoices_code]),
+        ...validatedInvoicesCode,
       ];
+    }
+
+    const requestName = updatedFields?.name;
+    const normalizeString = requestName
+      .trim()
+      .replace(/\s+/g, " ")
+      .toLowerCase();
+
+    if (/^[^a-zA-Z]/.test(normalizeString)) {
+      throw createError(400, "invalid name format.");
+    }
+
+    // mobile number can't be changed for security reason
+    const requestMobileNumber = updatedFields?.mobile;
+    if (requestMobileNumber) {
+      throw createError(400, "mobile number can't be changed");
     }
 
     const updatedMember = await Member.findOneAndUpdate(
