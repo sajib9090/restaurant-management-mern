@@ -5,6 +5,8 @@ import Table from "../models/table.model.js";
 import Member from "../models/member.model.js";
 import stringToNumber from "../helper/stringToNumber.js";
 import MenuItems from "../models/menuItems.model.js";
+import { validateId } from "../helper/validateId.js";
+import findDataById from "../services/findDataById.js";
 
 const handleCreateInvoice = async (req, res, next) => {
   try {
@@ -79,4 +81,24 @@ const handleCreateInvoice = async (req, res, next) => {
   }
 };
 
-export { handleCreateInvoice };
+const handleDeleteSoldInvoice = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    // checker for valid id or not
+    validateId(id);
+
+    // check invoice exist or not
+    const options = {};
+    await findDataById(id, SoldInvoice, options, next);
+    //perform delete operation
+    await SoldInvoice.findByIdAndDelete(id);
+
+    res.status(200).send({
+      success: true,
+      message: "Successfully deleted sold invoice",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+export { handleCreateInvoice, handleDeleteSoldInvoice };
