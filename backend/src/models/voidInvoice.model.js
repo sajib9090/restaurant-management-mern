@@ -19,10 +19,6 @@ const itemSchema = new Schema({
     type: Number,
     required: true,
   },
-  table_name: {
-    type: String,
-    required: true,
-  },
   total_price: {
     type: Number,
     required: true,
@@ -49,8 +45,11 @@ const VoidInvoiceSchema = new Schema(
       type: Number,
       required: true,
     },
+    previous_quantity: {
+      type: Number,
+    },
 
-    item: [itemSchema],
+    item: itemSchema,
   },
   { timestamps: true }
 );
