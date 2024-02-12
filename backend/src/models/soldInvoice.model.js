@@ -25,7 +25,6 @@ const itemSchema = new Schema({
   },
   total_price: {
     type: Number,
-    required: true,
   },
 });
 
@@ -52,11 +51,9 @@ const SoldInvoiceSchema = new Schema(
     },
     total_bill: {
       type: Number,
-      required: true,
     },
     total_discount: {
       type: Number,
-      required: true,
       default: 0,
     },
     items: [itemSchema],

@@ -68,13 +68,53 @@ const handleCreateVoidInvoice = async (req, res, next) => {
     });
 
     const voidInvoice = await newVoidInvoice.save();
+
+    await updateSoldInvoice(voidInvoice);
+
     res.status(200).send({
       success: true,
-      message: "Void invoice created",
+      message: "void invoice created and sold invoice also updated",
       voidInvoice,
     });
   } catch (error) {
     next(error);
+  }
+};
+
+const updateSoldInvoice = async (voidInvoice) => {
+  try {
+    const { sold_invoice_id, void_quantity, item } = voidInvoice;
+
+    const existingInvoice = await SoldInvoice.findOne({ _id: sold_invoice_id });
+
+    // console.log("item:", item._id, "invoice:", existingInvoice);
+    const findExistingItemInsideSoldInvoice = existingInvoice?.items?.find(
+      (i) => i?._id === item?._id
+    );
+
+    if (!findExistingItemInsideSoldInvoice) {
+      throw createError(400, "This item is not found inside the sold invoice");
+    }
+
+    const updatedItem = {
+      ...findExistingItemInsideSoldInvoice,
+      item_quantity:
+        findExistingItemInsideSoldInvoice?.item_quantity - void_quantity,
+      void: true,
+    };
+
+    // Find the index for which index will updated
+    const itemIndex = existingInvoice?.items?.findIndex(
+      (i) => i._id === item._id
+    );
+
+    // Replace the old item with the updated item
+    existingInvoice.items[itemIndex] = updatedItem;
+
+    // Save the updated SoldInvoice
+    await existingInvoice.save();
+  } catch (error) {
+    throw createError(error);
   }
 };
 

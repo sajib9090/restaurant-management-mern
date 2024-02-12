@@ -32,7 +32,7 @@ const VoidInvoiceSchema = new Schema(
       unique: true,
     },
     sold_invoice_id: {
-      type: Schema.ObjectId,
+      type: String,
       required: true,
       ref: "Sold-Invoice",
     },

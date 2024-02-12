@@ -123,12 +123,8 @@ const handleEditMember = async (req, res, next) => {
     }
 
     const requestName = updatedFields?.name;
-    const normalizeString = requestName
-      .trim()
-      .replace(/\s+/g, " ")
-      .toLowerCase();
 
-    if (/^[^a-zA-Z]/.test(normalizeString)) {
+    if (/^[^a-zA-Z]/.test(requestName)) {
       throw createError(400, "invalid name format.");
     }
 

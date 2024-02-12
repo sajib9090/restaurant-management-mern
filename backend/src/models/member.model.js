@@ -6,13 +6,11 @@ const MembersSchema = new Schema(
     name: {
       type: String,
       lowercase: true,
-      trim: true,
       required: [true, "name is required"],
       index: true,
     },
     mobile: {
       type: String,
-      trim: true,
       required: [true, "mobile number is required"],
     },
     discountValue: {

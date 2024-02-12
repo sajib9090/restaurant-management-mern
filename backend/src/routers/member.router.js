@@ -12,12 +12,7 @@ const MemberRouter = express.Router();
 
 MemberRouter.get("/members", handleGetMembers);
 MemberRouter.get("/member/:mobile", handleGetMember);
-MemberRouter.patch(
-  "/member/edit/:mobile",
-  isLoggedIn,
-  isAdminOrChairman,
-  handleEditMember
-);
+MemberRouter.patch("/member/edit/:mobile", isLoggedIn, handleEditMember);
 MemberRouter.post("/member/add-member", isLoggedIn, handleCreateMember);
 MemberRouter.delete(
   "/member/delete/:id",

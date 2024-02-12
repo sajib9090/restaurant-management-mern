@@ -81,6 +81,55 @@ const handleCreateInvoice = async (req, res, next) => {
   }
 };
 
+const handleGetSingleSoldInvoiceByFrId = async (req, res, next) => {
+  try {
+    const { fr_id } = req.params;
+
+    if (!fr_id) {
+      throw createError(400, "fr id is required");
+    }
+
+    const parsedId = parseInt(fr_id);
+
+    const existingInvoice = await SoldInvoice.findOne({ fr_id: parsedId });
+
+    if (!existingInvoice) {
+      throw createError(400, "invoice not found");
+    }
+    res.status(200).send({
+      success: true,
+      message: "successfully found invoice",
+      invoice: existingInvoice,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+const handleGetSingleSoldInvoiceById = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    if (!id) {
+      throw createError(400, "id is required");
+    }
+
+    validateId(id);
+
+    const existingInvoice = await SoldInvoice.findOne({ _id: id });
+
+    if (!existingInvoice) {
+      throw createError(400, "invoice not found");
+    }
+    res.status(200).send({
+      success: true,
+      message: "successfully found invoice",
+      invoice: existingInvoice,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const handleDeleteSoldInvoice = async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -101,4 +150,9 @@ const handleDeleteSoldInvoice = async (req, res, next) => {
     next(error);
   }
 };
-export { handleCreateInvoice, handleDeleteSoldInvoice };
+export {
+  handleCreateInvoice,
+  handleDeleteSoldInvoice,
+  handleGetSingleSoldInvoiceByFrId,
+  handleGetSingleSoldInvoiceById,
+};

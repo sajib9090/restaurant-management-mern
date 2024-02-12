@@ -57,9 +57,9 @@ const handleLoginUser = async (req, res, next) => {
     delete loggedInUser.password;
 
     //TOKEN COOKIE
-    const accessToken = await createJWT({ user }, accessTokenSecret, "5m");
+    const accessToken = await createJWT({ user }, accessTokenSecret, "1m");
     res.cookie("accessToken", accessToken, {
-      maxAge: 5 * 60 * 1000, // 5 minute in milliseconds
+      maxAge: 60 * 1000, // 1 minute in milliseconds
       httpOnly: true,
       secure: true,
       sameSite: "none",
@@ -86,8 +86,6 @@ const handleLoginUser = async (req, res, next) => {
 
 const handleLogoutUser = async (req, res, next) => {
   try {
-    console.log(req.user);
-    // Check if the user is authenticated
     // console.log(req.user);
     if (!req.user) {
       throw createError.Unauthorized("User is not authenticated");

@@ -51,6 +51,33 @@ const handleCreateOrderLog = async (req, res, next) => {
   }
 };
 
+const handleGetOrderLog = async (req, res, next) => {
+  try {
+    const { table_code } = req.params;
+    if (!table_code) {
+      throw createError(400, "Table code is required");
+    }
+
+    const existTable = await Table.findOne({ name: table_code });
+    if (!existTable) {
+      throw createError(400, `The table ${table_code} does not exist.`);
+    }
+
+    const existOrderLog = await OrderLog.findOne({ table_code });
+    if (!existOrderLog) {
+      throw createError(400, "Order history not found");
+    }
+
+    res.status(200).send({
+      success: true,
+      message: "Order log fetched successfully.",
+      orderLog: existOrderLog,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const handleDeleteOrderLog = async (req, res, next) => {
   try {
     const { table } = req.params;
@@ -71,4 +98,4 @@ const handleDeleteOrderLog = async (req, res, next) => {
   }
 };
 
-export { handleCreateOrderLog, handleDeleteOrderLog };
+export { handleCreateOrderLog, handleDeleteOrderLog, handleGetOrderLog };
