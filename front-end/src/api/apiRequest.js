@@ -41,4 +41,17 @@ const getApiRequest = async (url) => {
   }
 };
 
-export { postApiRequest, getApiRequest, patchApiRequest };
+const deleteApiRequest = async (url) => {
+  try {
+    const response = await axiosInstance.delete(baseUrl + url, {
+      withCredentials: true,
+    });
+    return response?.data;
+  } catch (error) {
+    if (error) {
+      throw error;
+    }
+  }
+};
+
+export { postApiRequest, getApiRequest, patchApiRequest, deleteApiRequest };

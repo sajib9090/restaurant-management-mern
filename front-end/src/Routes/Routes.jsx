@@ -19,6 +19,12 @@ const FindSellInvoice = lazy(() =>
 const SellHistory = lazy(() =>
   import("../Pages/Admin/SellReport/SellHistory/SellHistory")
 );
+const StaffRecord = lazy(() =>
+  import("../Pages/Admin/StaffRecord/StaffRecord")
+);
+const AddStaff = lazy(() =>
+  import("../Pages/Admin/StaffRecord/AddStaff/AddStaff")
+);
 
 export const router = createBrowserRouter([
   {
@@ -95,6 +101,24 @@ export const router = createBrowserRouter([
                 element: (
                   <Suspense fallback={<p>Loading...</p>}>
                     <SellHistory />
+                  </Suspense>
+                ),
+              },
+            ],
+          },
+          {
+            path: "staff-record",
+            element: (
+              <Suspense fallback={<p>Loading...</p>}>
+                <StaffRecord />
+              </Suspense>
+            ),
+            children: [
+              {
+                path: "add-staff",
+                element: (
+                  <Suspense fallback={<p>Loading...</p>}>
+                    <AddStaff />
                   </Suspense>
                 ),
               },
