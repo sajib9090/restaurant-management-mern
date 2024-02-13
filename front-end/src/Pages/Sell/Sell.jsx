@@ -51,8 +51,8 @@ const Sell = () => {
                 key={table._id}
                 className={`h-[200px] border border-gray-200 rounded-full shadow-xl flex flex-col justify-center items-center ${
                   uniqueTableNames?.includes(table?.name)
-                    ? "bg-red-300"
-                    : "hover:bg-[#1677ff1f] cursor-pointer hover:text-[#1677FF] duration-700"
+                    ? "bg-gradient-to-r from-red-300 to-pink-300"
+                    : "hover:bg-[#1677ff1f] cursor-pointer hover:text-[#1677FF] duration-700 bg-gradient-to-r from-white to-gray-200"
                 }`}
               >
                 <MdDining className="h-12 w-12 mb-2" />

@@ -12,7 +12,6 @@ import MemberRouter from "./routers/member.router.js";
 import MenuItemRouter from "./routers/menuItem.router.js";
 import StaffRouter from "./routers/staff.router.js";
 import ExpenseRouter from "./routers/expense.router.js";
-import OrderLogRouter from "./routers/orderLog.router.js";
 import SoldInvoiceRouter from "./routers/soldInvoice.router.js";
 import VoidInvoiceRouter from "./routers/voidInvoice.router.js";
 //
@@ -50,7 +49,6 @@ app.use("/api/v2", MemberRouter);
 app.use("/api/v2", MenuItemRouter);
 app.use("/api/v2", StaffRouter);
 app.use("/api/v2", ExpenseRouter);
-app.use("/api/v2", OrderLogRouter);
 app.use("/api/v2", SoldInvoiceRouter);
 app.use("/api/v2", VoidInvoiceRouter);
 

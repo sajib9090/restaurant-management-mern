@@ -8,6 +8,11 @@ import { Suspense, lazy } from "react";
 const Sell = lazy(() => import("../Pages/Sell/Sell"));
 const SelectOrders = lazy(() => import("../Pages/SelectOrders/SelectOrders"));
 const SoldInvoice = lazy(() => import("../Pages/SoldInvoice/SoldInvoice"));
+const Admin = lazy(() => import("../Pages/Admin/Admin"));
+const SellReport = lazy(() => import("../Pages/Admin/SellReport/SellReport"));
+const SellCalculation = lazy(() =>
+  import("../Pages/Admin/SellReport/SellCalculation/SellCalculation")
+);
 
 export const router = createBrowserRouter([
   {
@@ -46,6 +51,34 @@ export const router = createBrowserRouter([
             <SoldInvoice />
           </Suspense>
         ),
+      },
+      {
+        path: "/admin",
+        element: (
+          <Suspense fallback={<p>Loading...</p>}>
+            <Admin />
+          </Suspense>
+        ),
+        children: [
+          {
+            path: "sell-report",
+            element: (
+              <Suspense fallback={<p>Loading...</p>}>
+                <SellReport />
+              </Suspense>
+            ),
+            children: [
+              {
+                path: "sell-calculation",
+                element: (
+                  <Suspense fallback={<p>Loading...</p>}>
+                    <SellCalculation />
+                  </Suspense>
+                ),
+              },
+            ],
+          },
+        ],
       },
     ],
   },

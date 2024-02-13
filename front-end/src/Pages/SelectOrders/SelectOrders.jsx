@@ -61,6 +61,11 @@ const SelectOrders = () => {
   const [menuItemsSearchValue, setMenuItemsSearchValue] = useState("");
   const [filterMenuItemError, setFilterMenuItemError] = useState("");
 
+  const uniqueItemName =
+    tableWiseCart && tableWiseCart?.length > 0
+      ? [...new Set(tableWiseCart?.map((item) => item?.item_name))]
+      : [];
+
   // calculate total price
   const totalPrice = tableWiseCart?.reduce((sum, currentItem) => {
     const itemTotal =
@@ -287,7 +292,7 @@ const SelectOrders = () => {
     <div>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="py-2 px-2 bg-slate-400 text-lg font-semibold rounded-md flex sticky top-6 z-50"
+        className="py-2 px-2 bg-gradient-to-r from-gray-400 to-indigo-500 text-lg font-semibold rounded-md flex sticky top-6 z-50"
       >
         Check Invoice{" "}
         <p className="ml-2 px-2 bg-blue-300 rounded-full">{totalQuantity}</p>
@@ -348,7 +353,11 @@ const SelectOrders = () => {
                     handleCart(menuItem, table_name, selectedStaff)
                   }
                   key={menuItem?._id}
-                  className="flex justify-between items-center py-4 shadow-md px-2 border-b border-gray-300 cursor-pointer hover:shadow-md hover:bg-gray-200 hover:text-red-700"
+                  className={`flex justify-between items-center py-4 shadow-md px-2 border-b border-gray-300 cursor-pointer hover:shadow-md hover:bg-gray-200 hover:text-red-700 ${
+                    uniqueItemName?.includes(menuItem?.item_name)
+                      ? "bg-gray-200"
+                      : ""
+                  }`}
                 >
                   <div className="flex font-bold text-black hover:text-red-700 text-base">
                     <div>
@@ -370,7 +379,7 @@ const SelectOrders = () => {
                           : index == 2
                           ? "bg-[#457322]"
                           : "bg-pink-700"
-                      }`}
+                      } `}
                     >
                       <CurrencyFormatter value={menuItem?.item_price} />
                     </button>

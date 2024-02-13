@@ -81,6 +81,48 @@ const handleCreateInvoice = async (req, res, next) => {
   }
 };
 
+const handleGetAllSoldInvoices = async (req, res, next) => {
+  try {
+    res.status(200).send({
+      success: true,
+      message: "Fetched All Sold Invoices Successfully!",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const handleGetInvoicesByDate = async (req, res, next) => {
+  try {
+    const { date } = req.params;
+
+    const isValidDate = /^\d{4}-\d{2}-\d{2}$/.test(date);
+    if (!isValidDate) {
+      throw createError(
+        400,
+        "invalid date format. please use the format YYYY-MM-DD."
+      );
+    }
+
+    const parsedDate = new Date(date);
+
+    const invoices = await SoldInvoice.find({
+      createdAt: {
+        $gte: parsedDate,
+        $lt: new Date(parsedDate.getTime() + 24 * 60 * 60 * 1000),
+      },
+    });
+
+    res.status(200).send({
+      success: true,
+      message: "invoices retrieved successfully",
+      invoices,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const handleGetSingleSoldInvoiceByFrId = async (req, res, next) => {
   try {
     const { fr_id } = req.params;
@@ -155,4 +197,6 @@ export {
   handleDeleteSoldInvoice,
   handleGetSingleSoldInvoiceByFrId,
   handleGetSingleSoldInvoiceById,
+  handleGetAllSoldInvoices,
+  handleGetInvoicesByDate,
 };

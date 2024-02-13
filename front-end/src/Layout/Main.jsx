@@ -1,4 +1,4 @@
-import {useContext, useState } from "react";
+import { useContext, useState } from "react";
 import { MdDashboard } from "react-icons/md";
 import { AiFillHome, AiFillPlusSquare } from "react-icons/ai";
 import { MdSell } from "react-icons/md";
@@ -19,7 +19,6 @@ const Main = () => {
   const handleLogout = () => {
     logout();
   };
-
 
   const {
     token: { colorBgContainer },
@@ -73,7 +72,7 @@ const Main = () => {
               key={"/dashboard"}
               icon={<MdDashboard className="h-4 w-4" />}
             >
-              <Link to={"/dashboard"}>Admin</Link>
+              <Link to={"/admin"}>Admin</Link>
             </Menu.Item>
             <Menu.Item
               onClick={() => setIsOpen(!isOpen)}
@@ -129,7 +128,6 @@ const Main = () => {
           </Content>
         </Layout>
       </Layout>
-
     </div>
   );
 };
