@@ -9,6 +9,19 @@ const Sell = () => {
   const { tables, tableLoading } = useContext(ItemsContext);
   const { carts } = useContext(CartContext);
   const [orderLog, setOrderLog] = useState([]);
+  const [searchValue, setSearchValue] = useState("");
+  const [filteredTableError, setFilteredTableError] = useState("");
+
+  const filteredTables = tables?.filter((item) =>
+    item?.name?.includes(searchValue.toLowerCase())
+  );
+  useEffect(() => {
+    if (filteredTables?.length === 0) {
+      setFilteredTableError("Oops! No tables found.");
+    } else {
+      setFilteredTableError("");
+    }
+  }, [filteredTables]);
 
   const uniqueTableNames =
     carts && carts?.length > 0
@@ -41,11 +54,26 @@ const Sell = () => {
         </div>
       ) : (
         <div>
-          <h1 className="text-center font-bold text-3xl text-[#1677FF] my-4">
+          <h1 className="text-center font-bold text-3xl text-[#1677FF] mt-4 mb-2">
             Select a Table First
           </h1>
+          <div className="max-w-md mx-auto mb-8 relative">
+            <input
+              value={searchValue}
+              onChange={(e) => {
+                setSearchValue(e.target.value);
+              }}
+              className="h-[45px] w-full border-2 border-gray-500 rounded px-2 text-xl shadow-inner"
+              type="search"
+              placeholder="Search tables..."
+            />
+            <p className="text-base text-red-600 absolute">
+              {filteredTableError}
+            </p>
+          </div>
+
           <div className="grid grid-cols-4 gap-6">
-            {tables?.map((table) => (
+            {filteredTables?.map((table) => (
               <Link
                 to={`${table?.name}`}
                 key={table._id}

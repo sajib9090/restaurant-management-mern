@@ -269,7 +269,6 @@ const SelectOrders = () => {
         };
 
         if (totalDiscount && totalPrice) {
-          console.log(memberData);
           const response = await patchApiRequest(
             `/api/v2/member/edit/${member?.mobile}`,
             memberData

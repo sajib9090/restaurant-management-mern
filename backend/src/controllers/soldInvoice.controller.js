@@ -83,9 +83,23 @@ const handleCreateInvoice = async (req, res, next) => {
 
 const handleGetAllSoldInvoices = async (req, res, next) => {
   try {
+    const search = req.query.search || "";
+    const regExSearch = new RegExp(".*" + search + ".*", "i");
+
+    const filter = {
+      $or: [
+        { member: { $regex: regExSearch } },
+        { served_by: { $regex: regExSearch } },
+        { table_name: { $regex: regExSearch } },
+      ],
+    };
+
+    const invoices = await SoldInvoice.find(filter).sort({ createdAt: -1 });
+
     res.status(200).send({
       success: true,
-      message: "Fetched All Sold Invoices Successfully!",
+      message: "successfully found invoices",
+      invoices,
     });
   } catch (error) {
     next(error);
@@ -147,6 +161,7 @@ const handleGetSingleSoldInvoiceByFrId = async (req, res, next) => {
     next(error);
   }
 };
+
 const handleGetSingleSoldInvoiceById = async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -166,6 +181,76 @@ const handleGetSingleSoldInvoiceById = async (req, res, next) => {
       success: true,
       message: "successfully found invoice",
       invoice: existingInvoice,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const handleGetSoldInvoicesByMonth = async (req, res, next) => {
+  try {
+    const { month } = req.params;
+
+    const isValidMonth = /^[1-9]|1[0-2]$/.test(month);
+    if (!isValidMonth) {
+      throw createError(400, "Invalid month parameter.");
+    }
+
+    const startOfMonth = new Date(`${month}-01T00:00:00.000Z`);
+    const endOfMonth = new Date(
+      new Date(startOfMonth).setUTCMonth(startOfMonth.getUTCMonth() + 1) - 1
+    );
+
+    const invoices = await SoldInvoice.find({
+      createdAt: { $gte: startOfMonth, $lt: endOfMonth },
+    });
+
+    const dailyTotals = {};
+
+    // Process invoices to calculate daily totals
+    invoices.forEach((invoice) => {
+      const invoiceDate = invoice.createdAt.toISOString().split("T")[0];
+
+      if (!dailyTotals[invoiceDate]) {
+        dailyTotals[invoiceDate] = {
+          daily_sell: 0,
+          daily_discount: 0,
+        };
+      }
+
+      dailyTotals[invoiceDate].daily_sell += invoice.total_bill;
+      dailyTotals[invoiceDate].daily_discount += invoice.total_discount;
+    });
+
+    // Convert dailyTotals object to an array
+    const dailyTotalsArray = Object.entries(dailyTotals).map(
+      ([date, totals]) => ({
+        createdDate: date,
+        ...totals,
+      })
+    );
+
+    // Find max and min totals
+    const maxSell = Math.max(
+      ...dailyTotalsArray.map((totals) => totals.daily_sell)
+    );
+    const maxSellDate = dailyTotalsArray.find(
+      (totals) => totals.daily_sell === maxSell
+    ).createdDate;
+
+    const minSell = Math.min(
+      ...dailyTotalsArray.map((totals) => totals.daily_sell)
+    );
+    const minSellDate = dailyTotalsArray.find(
+      (totals) => totals.daily_sell === minSell
+    ).createdDate;
+
+    res.status(200).send({
+      success: true,
+      message: "Invoices and daily totals retrieved successfully",
+      invoices,
+      dailySellSummary: dailyTotalsArray,
+      minMaxSummary: { maxSellDate, maxSell, minSellDate, minSell },
     });
   } catch (error) {
     next(error);
@@ -199,4 +284,5 @@ export {
   handleGetSingleSoldInvoiceById,
   handleGetAllSoldInvoices,
   handleGetInvoicesByDate,
+  handleGetSoldInvoicesByMonth,
 };

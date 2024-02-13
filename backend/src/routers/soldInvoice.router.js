@@ -7,6 +7,7 @@ import {
   handleGetInvoicesByDate,
   handleGetSingleSoldInvoiceByFrId,
   handleGetSingleSoldInvoiceById,
+  handleGetSoldInvoicesByMonth,
 } from "../controllers/soldInvoice.controller.js";
 
 const SoldInvoiceRouter = express.Router();
@@ -19,6 +20,11 @@ SoldInvoiceRouter.get(
   handleGetSingleSoldInvoiceByFrId
 );
 SoldInvoiceRouter.get("/sold-invoice/id/:id", handleGetSingleSoldInvoiceById);
+SoldInvoiceRouter.get(
+  "/sold-invoices/month/:month",
+  handleGetSoldInvoicesByMonth
+);
+
 SoldInvoiceRouter.delete(
   "/sold-invoice/delete/:id",
   isLoggedIn,

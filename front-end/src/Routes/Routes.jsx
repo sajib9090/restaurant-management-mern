@@ -13,6 +13,12 @@ const SellReport = lazy(() => import("../Pages/Admin/SellReport/SellReport"));
 const SellCalculation = lazy(() =>
   import("../Pages/Admin/SellReport/SellCalculation/SellCalculation")
 );
+const FindSellInvoice = lazy(() =>
+  import("../Pages/Admin/SellReport/FindSellInvoice/FindSellInvoice")
+);
+const SellHistory = lazy(() =>
+  import("../Pages/Admin/SellReport/SellHistory/SellHistory")
+);
 
 export const router = createBrowserRouter([
   {
@@ -73,6 +79,22 @@ export const router = createBrowserRouter([
                 element: (
                   <Suspense fallback={<p>Loading...</p>}>
                     <SellCalculation />
+                  </Suspense>
+                ),
+              },
+              {
+                path: "find-sell-invoice",
+                element: (
+                  <Suspense fallback={<p>Loading...</p>}>
+                    <FindSellInvoice />
+                  </Suspense>
+                ),
+              },
+              {
+                path: "sell-history",
+                element: (
+                  <Suspense fallback={<p>Loading...</p>}>
+                    <SellHistory />
                   </Suspense>
                 ),
               },

@@ -7,6 +7,7 @@ import ReactToPrint from "react-to-print";
 
 const Invoice = ({ soldInvoice, grandTotal, handleBackToSell, backButton }) => {
   const componentRef = useRef();
+
   return (
     <div>
       <div
@@ -33,7 +34,7 @@ const Invoice = ({ soldInvoice, grandTotal, handleBackToSell, backButton }) => {
             InvoiceID: <span className="ml-1">{soldInvoice?.fr_id}</span>
           </p>
           <p className="text-xs mb-1">
-            <DateFormatter dateString={soldInvoice?.createdDate} />
+            <DateFormatter dateString={soldInvoice?.createdAt} />
           </p>
           <p className="capitalize text-xs">{soldInvoice?.table_name}</p>
         </div>
