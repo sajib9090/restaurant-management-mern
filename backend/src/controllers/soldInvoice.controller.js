@@ -206,11 +206,13 @@ const handleGetSoldInvoicesByMonth = async (req, res, next) => {
     });
 
     const dailyTotals = {};
+    const staffSellRecord = {};
 
-    // Process invoices to calculate daily totals
+    // Process invoices to calculate daily totals and staff sell record
     invoices.forEach((invoice) => {
       const invoiceDate = invoice.createdAt.toISOString().split("T")[0];
 
+      // Calculate daily totals
       if (!dailyTotals[invoiceDate]) {
         dailyTotals[invoiceDate] = {
           daily_sell: 0,
@@ -220,6 +222,15 @@ const handleGetSoldInvoicesByMonth = async (req, res, next) => {
 
       dailyTotals[invoiceDate].daily_sell += invoice.total_bill;
       dailyTotals[invoiceDate].daily_discount += invoice.total_discount;
+
+      // Calculate staff sell record
+      const servedBy = invoice.served_by; // Assuming 'served_by' is the staff field
+      if (!staffSellRecord[servedBy]) {
+        staffSellRecord[servedBy] = {};
+      }
+
+      staffSellRecord[servedBy][invoiceDate] =
+        (staffSellRecord[servedBy][invoiceDate] || 0) + invoice.total_bill;
     });
 
     // Convert dailyTotals object to an array
@@ -227,6 +238,17 @@ const handleGetSoldInvoicesByMonth = async (req, res, next) => {
       ([date, totals]) => ({
         createdDate: date,
         ...totals,
+      })
+    );
+
+    // Convert staffSellRecord object to an array
+    const staffSellRecordArray = Object.entries(staffSellRecord).map(
+      ([staff, sellRecord]) => ({
+        staff,
+        sellRecord: Object.entries(sellRecord).map(([date, sum]) => ({
+          createdAt: date,
+          sum,
+        })),
       })
     );
 
@@ -251,6 +273,7 @@ const handleGetSoldInvoicesByMonth = async (req, res, next) => {
       invoices,
       dailySellSummary: dailyTotalsArray,
       minMaxSummary: { maxSellDate, maxSell, minSellDate, minSell },
+      staffSellRecord: staffSellRecordArray,
     });
   } catch (error) {
     next(error);

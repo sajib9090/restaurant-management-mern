@@ -25,6 +25,9 @@ const StaffRecord = lazy(() =>
 const AddStaff = lazy(() =>
   import("../Pages/Admin/StaffRecord/AddStaff/AddStaff")
 );
+const StaffSellRecord = lazy(() =>
+  import("../Pages/Admin/StaffRecord/StaffSellRecord/StaffSellRecord")
+);
 
 export const router = createBrowserRouter([
   {
@@ -119,6 +122,14 @@ export const router = createBrowserRouter([
                 element: (
                   <Suspense fallback={<p>Loading...</p>}>
                     <AddStaff />
+                  </Suspense>
+                ),
+              },
+              {
+                path: "staff-sell-record",
+                element: (
+                  <Suspense fallback={<p>Loading...</p>}>
+                    <StaffSellRecord />
                   </Suspense>
                 ),
               },
