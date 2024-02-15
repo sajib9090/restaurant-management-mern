@@ -32,6 +32,7 @@ const limiter = rateLimit({
 app.use(
   cors({
     origin: "http://localhost:5173",
+    // origin: "https://ephemeral-heliotrope-5d185e.netlify.app",
     credentials: true,
   })
 );

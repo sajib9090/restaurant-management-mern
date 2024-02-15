@@ -28,6 +28,16 @@ const AddStaff = lazy(() =>
 const StaffSellRecord = lazy(() =>
   import("../Pages/Admin/StaffRecord/StaffSellRecord/StaffSellRecord")
 );
+const ExpenseReport = lazy(() =>
+  import("../Pages/Admin/ExpenseReport/ExpenseReport")
+);
+const AddDailyExpenses = lazy(() =>
+  import("../Pages/Admin/ExpenseReport/AddDailyExpenses/AddDailyExpenses")
+);
+const Features = lazy(() => import("../Pages/Admin/Features/Features"));
+const MaintainTables = lazy(() =>
+  import("../Pages/Admin/Features/MaintainTables/MaintainTables")
+);
 
 export const router = createBrowserRouter([
   {
@@ -130,6 +140,42 @@ export const router = createBrowserRouter([
                 element: (
                   <Suspense fallback={<p>Loading...</p>}>
                     <StaffSellRecord />
+                  </Suspense>
+                ),
+              },
+            ],
+          },
+          {
+            path: "expense-report",
+            element: (
+              <Suspense fallback={<p>Loading...</p>}>
+                <ExpenseReport />
+              </Suspense>
+            ),
+            children: [
+              {
+                path: "add-daily-expenses",
+                element: (
+                  <Suspense fallback={<p>Loading...</p>}>
+                    <AddDailyExpenses />
+                  </Suspense>
+                ),
+              },
+            ],
+          },
+          {
+            path: "features",
+            element: (
+              <Suspense fallback={<p>Loading...</p>}>
+                <Features />
+              </Suspense>
+            ),
+            children: [
+              {
+                path: "maintain-tables",
+                element: (
+                  <Suspense fallback={<p>Loading...</p>}>
+                    <MaintainTables />
                   </Suspense>
                 ),
               },

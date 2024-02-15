@@ -9,6 +9,8 @@ const handleCreateExpense = async (req, res, next) => {
   try {
     const { title, expense_amount, expense_creator } = req.body;
 
+    console.log(expense_creator);
+
     if (!title || !expense_amount) {
       throw createError(400, "Title and Expense Amount are required fields");
     }
@@ -42,7 +44,7 @@ const handleCreateExpense = async (req, res, next) => {
 
 const handleGetExpenses = async (req, res, next) => {
   try {
-    const { id, month, startDate, endDate } = req.query;
+    const { id, month, startDate, endDate, specificDate } = req.query;
     const filter = {};
 
     if (id) {
@@ -64,6 +66,15 @@ const handleGetExpenses = async (req, res, next) => {
 
     if (endDate) {
       filter.createdAt = { ...filter.createdAt, $lt: new Date(endDate) };
+    }
+
+    if (specificDate) {
+      const date = new Date(specificDate);
+      date.setUTCHours(0, 0, 0, 0);
+      filter.createdAt = {
+        $gte: date,
+        $lt: new Date(date.getTime() + 24 * 60 * 60 * 1000),
+      };
     }
 
     const expenses = await Expense.find(filter).sort({ createdAt: -1 });

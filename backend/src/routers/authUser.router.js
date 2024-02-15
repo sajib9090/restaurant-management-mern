@@ -15,7 +15,7 @@ const limiter = rateLimiter(
 );
 
 //user router
-userAuthRouter.post("/user/auth/login", limiter, isLoggedOut, handleLoginUser);
+userAuthRouter.post("/user/auth/login", limiter, handleLoginUser);
 userAuthRouter.post("/user/auth/logout", isLoggedIn, handleLogoutUser);
 userAuthRouter.get("/user/auth/refresh-token", handleRefreshToken);
 

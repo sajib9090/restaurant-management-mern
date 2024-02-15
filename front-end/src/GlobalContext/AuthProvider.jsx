@@ -3,6 +3,7 @@
 import axios from "axios";
 import { createContext, useEffect, useState } from "react";
 import axiosInstance from "../Hooks/useApiRequest";
+import { getApiRequest } from "../api/apiRequest";
 
 export const AuthContext = createContext(null);
 
@@ -11,9 +12,19 @@ const AuthProvider = ({ children }) => {
   const [apiLoading, setApiLoading] = useState(true);
 
   useEffect(() => {
-    const userData = JSON.parse(localStorage.getItem("user"));
+    const userData = JSON.parse(localStorage.getItem("user_id"));
+
     if (userData) {
-      setUser(userData);
+      getApiRequest(`/api/v2/user/${userData}`)
+        .then((res) => {
+          setUser(res.user);
+        })
+        .catch((err) => {
+          setUser(null);
+        })
+        .finally(() => {
+          setApiLoading(false);
+        });
     }
     setApiLoading(false);
   }, []);
@@ -24,7 +35,10 @@ const AuthProvider = ({ children }) => {
       { username, password },
       { withCredentials: true }
     );
-    localStorage.setItem("user", JSON.stringify(response.data.userInfo));
+    localStorage.setItem(
+      "user_id",
+      JSON.stringify(response?.data?.userInfo?._id)
+    );
     setUser(response.data.userInfo);
     setApiLoading(false);
     return response;
@@ -39,7 +53,7 @@ const AuthProvider = ({ children }) => {
       );
 
       if (response) {
-        localStorage.removeItem("user");
+        localStorage.removeItem("user_id");
         setUser(null);
         setApiLoading(false);
       }
