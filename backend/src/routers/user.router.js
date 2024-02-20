@@ -1,6 +1,7 @@
 import express from "express";
 import {
   handleDeleteUser,
+  handleEditUserRole,
   handleGetUser,
   handleGetUsers,
   handleProcessRegister,
@@ -12,6 +13,12 @@ const userRouter = express.Router();
 userRouter.get("/users", isLoggedIn, isAdminOrChairman, handleGetUsers);
 userRouter.get("/user/:id", isLoggedIn, handleGetUser);
 userRouter.delete("/user/:id", isLoggedIn, isAdminOrChairman, handleDeleteUser);
+userRouter.patch(
+  "/user/edit/:id",
+  isLoggedIn,
+  isAdminOrChairman,
+  handleEditUserRole
+);
 
 //only admin and chairman can create user
 userRouter.post(

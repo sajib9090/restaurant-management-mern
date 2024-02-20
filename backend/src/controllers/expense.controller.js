@@ -89,6 +89,48 @@ const handleGetExpenses = async (req, res, next) => {
   }
 };
 
+const handleGetExpensesByStartAndEndDate = async (req, res, next) => {
+  try {
+    const { startDate, endDate } = req.query;
+
+    let query = {};
+
+    if (startDate && endDate) {
+      query.createdAt = {
+        $gte: new Date(startDate),
+        $lt: new Date(
+          new Date(endDate).setDate(new Date(endDate).getDate() + 1)
+        ),
+      };
+    }
+
+    let pipeline = [
+      { $match: query },
+      { $sort: { createdAt: 1 } },
+      {
+        $group: {
+          _id: {
+            $dateToString: { format: "%Y-%m-%d", date: "$createdAt" },
+          },
+          expenses: { $push: "$$ROOT" },
+          totalExpenses: { $sum: "$expense_amount" },
+        },
+      },
+      { $sort: { _id: 1 } },
+    ];
+
+    let result = await Expense.aggregate(pipeline).exec();
+
+    res.status(200).send({
+      success: true,
+      message: "expense data retrieved successfully",
+      expenses: result,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const handleDeleteExpense = async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -110,4 +152,9 @@ const handleDeleteExpense = async (req, res, next) => {
   }
 };
 
-export { handleCreateExpense, handleGetExpenses, handleDeleteExpense };
+export {
+  handleCreateExpense,
+  handleGetExpenses,
+  handleDeleteExpense,
+  handleGetExpensesByStartAndEndDate,
+};

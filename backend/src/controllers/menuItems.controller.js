@@ -118,12 +118,6 @@ const handleEditMenuItem = async (req, res, next) => {
     const options = {};
     const menuItem = await findDataById(id, MenuItems, options, next);
     if (menuItem) {
-      if (
-        updatedData.item_name &&
-        updatedData.item_name === menuItem.item_name
-      ) {
-        throw createError(400, "Item name already exist");
-      }
       // Update the data in the database
       const result = await MenuItems.updateOne(
         { _id: id },

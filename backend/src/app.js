@@ -14,13 +14,12 @@ import StaffRouter from "./routers/staff.router.js";
 import ExpenseRouter from "./routers/expense.router.js";
 import SoldInvoiceRouter from "./routers/soldInvoice.router.js";
 import VoidInvoiceRouter from "./routers/voidInvoice.router.js";
-//
 
 const app = express();
 
 const limiter = rateLimit({
   windowMs: 1 * 60 * 1000,
-  limit: 10,
+  max: 10,
   handler: (_, res) => {
     res
       .status(429)
@@ -31,9 +30,14 @@ const limiter = rateLimit({
 //middleware
 app.use(
   cors({
-    origin: "http://localhost:5173",
-    // origin: "https://ephemeral-heliotrope-5d185e.netlify.app",
+    // origin: [
+    //   "http://localhost:5173",
+    //   "https://ephemeral-heliotrope-5d185e.netlify.app",
+    //   "https://foodrepublic111.web.app",
+    // ],
+    origin: "*",
     credentials: true,
+    optionsSuccessStatus: 200,
   })
 );
 

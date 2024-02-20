@@ -3,8 +3,8 @@ import { MONGODB_URI } from "../../secret.js";
 
 const connectDB = async () => {
   try {
-    await mongoose.connect("mongodb://localhost:27017", {
-      dbName: "Restaurant-Management-Backend",
+    await mongoose.connect(MONGODB_URI, {
+      dbName: "Restaurant-Management",
     });
     console.log("Pinged! MongoDB connected successfully!");
     mongoose.connection.on("error", (err) => {

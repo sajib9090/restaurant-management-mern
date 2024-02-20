@@ -1,6 +1,7 @@
 import User from "../models/user.model.js";
 import createError from "http-errors";
 import findDataById from "../services/findDataById.js";
+import { validateId } from "../helper/validateId.js";
 
 const handleGetUsers = async (req, res, next) => {
   try {
@@ -60,7 +61,7 @@ const handleDeleteUser = async (req, res, next) => {
 
 const handleProcessRegister = async (req, res, next) => {
   try {
-    const { username, password } = req.body;
+    const { username, password, isAdmin, isChairman } = req.body;
 
     if (!username) {
       throw createError(400, "Username is required");
@@ -102,6 +103,8 @@ const handleProcessRegister = async (req, res, next) => {
     // Create a new user
     const newUser = new User({
       username,
+      isAdmin,
+      isChairman,
       password,
     });
 
@@ -120,9 +123,44 @@ const handleProcessRegister = async (req, res, next) => {
   }
 };
 
+const handleEditUserRole = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { isAdmin, isChairman, isBanned } = req.body;
+
+    validateId(id);
+
+    const user = await User.findById(id);
+
+    if (!user) {
+      throw createError(400, "user not found");
+    }
+
+    if (isAdmin !== undefined) {
+      user.isAdmin = isAdmin;
+    }
+    if (isChairman !== undefined) {
+      user.isChairman = isChairman;
+    }
+    if (isBanned !== undefined) {
+      user.isBanned = isBanned;
+    }
+
+    await user.save();
+
+    res.status(200).send({
+      success: true,
+      message: "user updated successfully",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export {
   handleGetUsers,
   handleProcessRegister,
   handleGetUser,
   handleDeleteUser,
+  handleEditUserRole,
 };
